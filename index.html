@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossário da Economia – CORECON-PB</title>
+<style>
+  :root { --fundo:#ffffff; --texto:#1b1b1b; --suave:#555; --destaque:#0b5d3b; --borda:#d8d8d8; }
+  @media (prefers-color-scheme: dark) {
+    :root { --fundo:#14181a; --texto:#f0f0f0; --suave:#b5b5b5; --destaque:#6fd3a0; --borda:#3a3f42; }
+  }
+  body { margin:0; background:var(--fundo); color:var(--texto); font:18px/1.6 system-ui, sans-serif; }
+  main { max-width:44rem; margin:0 auto; padding:1.5rem 1rem 3rem; }
+  h1 { font-size:1.8rem; margin:0 0 .25rem; }
+  .sub { color:var(--suave); margin:0 0 1.5rem; }
+  label { display:block; font-weight:600; margin-bottom:.35rem; }
+  input, select { width:100%; box-sizing:border-box; font:inherit; padding:.6rem; border:2px solid var(--borda); border-radius:8px; background:var(--fundo); color:var(--texto); }
+  input:focus, select:focus { outline:3px solid var(--destaque); }
+  .filtros { display:grid; gap:1rem; margin-bottom:1.5rem; }
+  article { border-top:1px solid var(--borda); padding:1rem 0; }
+  article h2 { margin:0 0 .25rem; font-size:1.3rem; color:var(--destaque); }
+  .tema { font-size:.85rem; color:var(--suave); margin:0 0 .5rem; }
+  p { margin:.3rem 0; }
+  .fonte { font-size:.85rem; color:var(--suave); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Glossário da Economia</h1>
+  <p class="sub">Termos da economia explicados de forma simples. Uma iniciativa do CORECON-PB em apoio ao “PB sem dívidas”.</p>
+
+  <div class="filtros">
+    <div>
+      <label for="busca">Buscar um termo</label>
+      <input id="busca" type="search" placeholder="Ex.: juros">
+    </div>
+    <div>
+      <label for="tema">Tema</label>
+      <select id="tema"><option value="">Todos</option></select>
+    </div>
+  </div>
+
+  <p id="contagem" aria-live="polite"></p>
+  <section id="lista" aria-label="Verbetes"></section>
+</main>
+
+<script>
+let verbetes = [];
+const lista = document.getElementById('lista');
+const busca = document.getElementById('busca');
+const tema = document.getElementById('tema');
+const contagem = document.getElementById('contagem');
+
+function norm(s) { return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+
+function mostrar() {
+  const q = norm(busca.value.trim());
+  const t = tema.value;
+  const achados = verbetes
+    .filter(v => (!t || v.tema === t) && (!q || norm(v.termo + ' ' + v.definicao).includes(q)))
+    .sort((a, b) => a.termo.localeCompare(b.termo, 'pt-BR'));
+  contagem.textContent = achados.length + (achados.length === 1 ? ' termo encontrado' : ' termos encontrados');
+  lista.innerHTML = '';
+  for (const v of achados) {
+    const el = document.createElement('article');
+    const h = document.createElement('h2'); h.textContent = v.termo;
+    const tm = document.createElement('p'); tm.className = 'tema'; tm.textContent = v.tema;
+    const d = document.createElement('p'); d.textContent = v.definicao;
+    const e = document.createElement('p'); e.textContent = 'Exemplo: ' + v.exemplo;
+    const i = document.createElement('p'); i.textContent = 'Por que importa: ' + v.importa;
+    const f = document.createElement('p'); f.className = 'fonte'; f.textContent = 'Fonte: ' + v.fonte;
+    el.append(h, tm, d, e, i, f);
+    lista.append(el);
+  }
+}
+
+fetch('data/glossario.json')
+  .then(r => r.json())
+  .then(dados => {
+    verbetes = dados;
+    [...new Set(dados.map(v => v.tema))].sort().forEach(t => {
+      const o = document.createElement('option'); o.value = t; o.textContent = t; tema.append(o);
+    });
+    mostrar();
+  })
+  .catch(() => { contagem.textContent = 'Não foi possível carregar o glossário.'; });
+
+busca.addEventListener('input', mostrar);
+tema.addEventListener('change', mostrar);
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+[
+  {
+    "termo": "Inflação",
+    "tema": "Preços e inflação",
+    "definicao": "Aumento geral e contínuo dos preços. Com a mesma quantia, você compra menos do que comprava antes.",
+    "exemplo": "Se o feijão e o aluguel sobem durante o ano, o seu salário rende menos no fim do mês.",
+    "importa": "Ela diminui o poder de compra da família, principalmente de quem tem renda fixa.",
+    "fonte": "A preencher e conferir (por exemplo, Banco Central ou IBGE)"
+  },
+  {
+    "termo": "Juros",
+    "tema": "Juros e crédito",
+    "definicao": "Valor cobrado pelo uso do dinheiro de outra pessoa ou instituição por um tempo.",
+    "exemplo": "Ao parcelar uma compra com juros, você paga mais do que o preço à vista.",
+    "importa": "Juros altos fazem uma dívida crescer rápido e pesam no orçamento.",
+    "fonte": "A preencher e conferir (por exemplo, Banco Central)"
+  },
+  {
+    "termo": "Inadimplência",
+    "tema": "Dívidas e orçamento",
+    "definicao": "Situação de quem não pagou uma dívida até a data combinada.",
+    "exemplo": "Uma conta de cartão que passa do vencimento sem pagamento fica inadimplente.",
+    "importa": "Gera multas, juros extras e pode levar ao nome sujo; é um dos focos do PB sem dívidas.",
+    "fonte": "A preencher e conferir (por exemplo, Banco Central)"
+  }
+]
